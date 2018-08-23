@@ -1,0 +1,38 @@
+apps:
+  name     : 'api-koa'
+  script   : ./app.js
+  instances: 1
+  exec_mode: cluster
+  autorestart: true
+  watch: true
+  restart_delay: 10000
+
+  env:
+    NODE_ENV: development
+    NODE_PORT: 3232
+
+    DB_HOST: host
+
+    DB_PORT: port
+    DB_NAME: name
+    DB_USERNAME: username
+    DB_PASSWORD: pass
+    
+    DB_MAX: max 
+    DB_IDLE_TIMEOUT: timeout
+    DB_CONNECTION_TIMEOUT: conection
+
+  env_production:
+    NODE_ENV: production
+    NODE_PORT: 3232
+
+    DB_HOST: host
+
+    DB_PORT: port
+    DB_NAME: name
+    DB_USERNAME: username
+    DB_PASSWORD: pass
+    
+    DB_MAX: max 
+    DB_IDLE_TIMEOUT: timeout
+    DB_CONNECTION_TIMEOUT: conection

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="robots" content="noindex">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/main.css">
+    
+    <title>Explorer</title>
+  </head>
+  <body>
+    
+    <div id="app">
+  
+      <div class="container"> 
+        
+        <div class="sidebar">
+          <h1>API Core Explorer</h1>
+          <ul class="version">
+            <li v-for="(controllers, version) in endpoints">
+            
+              <ul class="controller">
+                <li v-for="(controller, controllerName) in controllers">
+                  
+                  <h3>{{ controllerName }} {{ version }}</h3>
+                  <ul class="endpoint">
+                    <li v-for="(endpoint, endpointName) in controller">
+                       <p v-on:click="info(endpoint, '/' + version + '/' + controllerName)">{{ endpointName }}</p> 
+                    </li>
+                  </ul>
+
+                </li>
+              </ul>
+
+            </li>
+          </ul>
+        </div>
+        
+        <div class="content">
+          <div class="title">
+            <span v-if="endpoint.verb" v-bind:class="endpoint.verb" class="method">{{ endpoint.verb }}</span> 
+            <h1 class="path"> {{ path }} </h1> 
+          </div>
+        </div>
+        
+        <div class="content">
+          <section style="float: left;" v-if="endpoint.verifyParams" class="description">
+           
+            <table class="parameters">
+              <caption>
+                <span class="operations">Parameters</span> 
+              </caption>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Type</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr v-for="(param, paramName, index) in endpoint.verifyParams">
+                  <td class>{{ index + 1 }} </td>
+                  <td>
+                    {{ paramName }} 
+                    <span v-if="param.required" class="required">*</span> 
+                    <small v-if="param.description"><i>{{ param.description }}</i></small> 
+                   
+                  </td>
+                  <td class="type">
+                    {{ param.type }}
+                    <span v-if="param.type === 'enum'">{{ param.values }}</span> 
+                    <span v-if="param.itemType === 'object'" class="required">object</span>
+
+                    <span v-if="param.rule">
+                      <b> [{ </b> 
+                      <ul v-for="(p, name, index) in param.rule">
+                          <li>
+                            <b v-text="name"></b>
+                            [<span v-text="p.type"></span>]
+                            <small><i v-text="p.description"></i></small> 
+                          </li>
+                      </ul>
+                      <b> }] </b> 
+                    </span>
+
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+
+          </section>
+          
+          <section style="width: 50%; float: right;"> 
+            <span class="operations">Input example</span> 
+            <pre v-if="endpoint.verb === 'POST' " v-html="prettyAreaData()"></pre>
+            <pre v-if="endpoint.verb === 'PUT' " v-html="prettyAreaData()"></pre>
+            <pre v-if="endpoint.verb === 'DELETE' " v-html="prettyAreaData()"></pre>
+            <p v-if="endpoint.verb === 'GET' "  v-html="queryString()"></p>
+          </section>
+
+        </div>
+        
+        <div class="model">
+          <section class="description">
+            <table>
+              <caption class="operations">
+                Response Messages
+              </caption>
+              <tbody>
+                <tr>
+                  <td>200</td>
+                  <td>The resource server was retrieved.</td>
+                </tr>
+                <tr>
+                  <td>201</td>
+                  <td>The resource server was created.</td>
+                </tr>
+                <tr>
+                  <td>403</td>
+                  <td>The request was valid, but the server is refusing action.</td>
+                </tr>
+                <tr>
+                  <td>404</td>
+                  <td>The resource server does not exist.</td>
+                </tr>
+                  <tr>
+                  <td>405</td>
+                  <td>Method not allowed.</td>
+                </tr>
+                <tr>
+                  <td>422</td>
+                  <td>The request was well-formed but was unable to be followed due to semantic errors.</td>
+                </tr>
+                <tr>
+                  <td>500</td>
+                  <td>Internal Server Error. </td>
+                </tr>
+              </tbody>
+            </table>
+          </section> 
+        </div>
+      
+      </div>
+
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+
+        var app = new Vue({
+          el: '#app',
+          data: {
+            endpoints:{},
+            endpoint:{},
+            path: null,
+            model: function() { 
+              return formatModel(this.endpoint.verifyParams);
+            },
+            queryString: function (){
+              return "?" + getQueryString(this.model());
+            },
+            prettyAreaData: function() {
+              let json = JSON.stringify(this.model(), null, 2)
+              json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+              return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+]?\d+)?)/g, function(match) {
+                var cls = 'number'
+                if (/^"/.test(match)) {
+                  if (/:$/.test(match)) {
+                    cls = 'key'
+                  } else {
+                    cls = 'string'
+                  }
+                } else if (/true|false/.test(match)) {
+                  cls = 'boolean'
+                } else if (/null/.test(match)) {
+                  cls = 'null'
+                }
+                return '<span class="' + cls + '">' + match + '</span>'
+              })
+            }
+          },
+
+          created: function () {
+            this.fetchData();
+          },
+
+          methods: {
+            fetchData: async function () {
+              // await response of fetch call
+              let response = await fetch('/explorer/data');
+              // only proceed once promise is resolved
+              this.endpoints = await response.json();
+            },
+            info: function (info, path) {
+              this.path = path;
+              this.endpoint = info;
+            }
+          }
+
+        })
+
+      });  
+
+      function getQueryString(params) {
+        var esc = encodeURIComponent;
+        return Object.keys(params)
+          .map(k => esc(k) + '=' + esc(params[k]))
+          .join('&');
+      }
+      
+      function formatModel(model){
+        let obj = {}
+
+        for (let param in model) {
+
+          switch(model[param].type) {
+            case "string":
+
+              if(model[param].format){
+                obj[param] = "1992-12-02T23:00:00+01:00";
+              }else{
+                obj[param] = "";
+              }
+              
+              break;
+
+            case "date":
+              obj[param] = "YYYY-MM-DD";
+              break;
+            
+            case "boolean":
+              obj[param] = true;
+              break;
+
+            case "int":
+              obj[param] = 1;
+              break;   
+            
+            case "number":
+              obj[param] = 1;
+              break;  
+
+            case "array":
+
+              if(model[param].itemType){
+                obj[param] = [formatModel(model[param].rule)];
+              }else{
+                obj[param] = [];
+              }
+
+              break;       
+
+            default:
+              obj[param] = "";
+          }
+
+        }
+
+        return obj;
+      }
+
+    </script>
+  </body>
+</html>

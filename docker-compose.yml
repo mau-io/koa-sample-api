@@ -1,0 +1,40 @@
+ 
+version: '2'
+services:
+  
+  api:
+    build: .
+    # Running tests                                   : mocha --reporter spec
+    # Auto restart server after change code           : nodemon
+    command: nodemon app.js
+    working_dir: /usr/app/
+    volumes:
+      - ./:/usr/app/
+    ports:
+      - "3232:3232"
+      #- "8701:8701"  
+    environment:
+      # development or production
+      NODE_ENV: development
+      NODE_PORT: 3232
+      
+      DB_HOST: host
+      DB_PORT: 5432
+      DB_NAME: dbname
+      DB_USERNAME: username
+      DB_PASSWORD: pass
+
+      DB_MAX: 100
+      DB_IDLE_TIMEOUT: 7000
+      DB_CONNECTION_TIMEOUT: 7000
+
+  #postgres:
+    #image: postgres:9.6.2-alpine
+    #environment:
+     # POSTGRES_USER: postgres
+     # POSTGRES_PASSWORD: postgres
+     # POSTGRES_DB: bbplatform
+    #ports:
+     # - "5433:5432" 
+    #volumes:
+      #- ./:/var/lib/postgresql
