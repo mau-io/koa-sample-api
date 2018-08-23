@@ -26,11 +26,14 @@ pm2 start ecosystem.example.yml --env development
 pm2 start ecosystem.example.yml --env production	
 ```
 
-Luego abra un navegador y vaya a [localhost:3232/explorer](localhost:3232/explorer) para ver el explorador de rutas.
+Luego abra un navegador y vaya a [http://localhost:3232/explorer](http://localhost:3232/explorer) para ver el explorador de rutas.
+
+**Test**
+
+[http://localhost:3232/v1/user/?id=234](http://localhost:3232/v1/user/?id=234) 
+
 
 ![Figure 1-1](public/images/explorer.jpg "Figure 1-1")
-
-
 
 
 Con Docker
