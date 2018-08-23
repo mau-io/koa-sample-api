@@ -8,14 +8,15 @@ const ISO_8601  = /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(\.\d+)?(([+-]\d\d:\d\d)|Z)?$/
 
 module.exports = {
   v1:{
-
+    
+    /*==================================================================================== */
     user:{
 
       getUser:{
         description: "description...",
         verb: "GET",
         verifyParams:{
-          id:       { type: 'string', required: false },
+          id:       { type: 'string', required: false, description: "description..."},
           username: { type: 'string', required: false },
         }
       },
@@ -31,7 +32,8 @@ module.exports = {
             required: true,
             min:      1,
             rule: {
-              otheString: { type: 'string', required: true, format: ISO_8601 },
+              otherDate:  { type: 'date',   required: true, description: "description..."},
+              otheString: { type: 'string', required: true, description: "description...", format: ISO_8601 },
               otheNumber: { type: 'number', required: true, min: 0},
               otherInt:   { type: 'int',    required: true, min: 1000, max: 100000},
               otherEnum:  { type: 'enum', 	required: true, values: ['opcion1','opcion2']}, 
@@ -44,7 +46,21 @@ module.exports = {
         description: "description...",
         verb: "PUT",
         verifyParams:{
-          id: { type: 'string', required: true },
+          id:       { type: 'string', required: true },
+          username: { type: 'string', required: false },
+          otherData: {
+            type:     'array',
+            itemType: 'object',
+            required: false,
+            min:      1,
+            rule: {
+              otherDate:  { type: 'date',   required: true, description: "description..."},
+              otheString: { type: 'string', required: true, description: "description...", format: ISO_8601 },
+              otheNumber: { type: 'number', required: true, min: 0},
+              otherInt:   { type: 'int',    required: true, min: 1000, max: 100000},
+              otherEnum:  { type: 'enum', 	required: true, values: ['opcion1','opcion2']}, 
+            }
+          },
         }
       },
       
@@ -65,7 +81,7 @@ module.exports = {
         verb: "POST",
         verifyParams:{
           title:        { type: 'string', required: true},
-          billing_code: { type: 'string', required: true, description: "description..." },          
+          billing_code: { type: 'string', required: true},          
         }
       },
 
