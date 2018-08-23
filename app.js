@@ -32,9 +32,9 @@ app.use(logger({
 }))
 
 app.use(koaBody({
-  jsonLimit: "20mb",
-  formLimit: "20mb",
-  textLimit: "20mb",
+  jsonLimit: "5mb",
+  formLimit: "5mb",
+  textLimit: "5mb",
 }));
 
 app.use(serve('./public'));
@@ -48,13 +48,12 @@ app.use(allowedMethods());
 
 const server = http.createServer(app.callback()).listen(config.SERVER.port,  () => {
 
-console.log(`
-\x1b[34m================================================================
-\x1b[34m API CORE  (ﾟｰﾟ)/
-\x1b[34m================================================================`);
-
-  console.log('\x1b[36m%s: \x1b[0m' + process.env.NODE_ENV, "NODE_ENV");
-  console.log('\x1b[36m%s: \x1b[0m' + config.SERVER.port, "Listening at port");
-  console.log("\x1b[34m================================================================");
+  console.log(`
+  \x1b[34m================================================================
+  \x1b[36m API RUNNING  (ﾟｰﾟ)/
+  \x1b[34m================================================================
+  \x1b[36m NODE_ENV:          \x1b[0m ${process.env.NODE_ENV}
+  \x1b[36m Listening at port: \x1b[0m ${config.SERVER.port} 
+  \x1b[34m================================================================`);
 
 });
