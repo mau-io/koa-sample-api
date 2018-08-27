@@ -68,21 +68,21 @@ Files：
 │   │   └── v2
 │   └── db	
 │   │   └── index.js                    // Contiene las funciones que se utilizan para crear la consulta a postgres
-│   │   └── util.js                     // Solo es el archivo donde se crea la instancia del conector node-postgres usando config.js
+│   │   └── util.js                     // Archivo donde se crea la instancia del conector node-postgres usando config.js
 │   └── middleware	
 │   │   └── conditionalParameters.js    // Sirve para validar que dentro de un grupo de parametros que al menos uno se envie, 
 │   │   └── error.js                    // Personaliza la respuesta  que se da ante un error
 │   │   └── parameter.js                // Encargado de la validacion de parametros GET o POST
 │   └── routes
-│   │   └── endpoints.js                // IMPORTANTE, es aqui donde se configuran las rutas y parametros que ocupan
+│   │   └── endpoints.js                // IMPORTANTE, es aqui donde se configuran nuevas rutas con sus  respectivos parametros 
 │   │   └── index.js                    // Se da de alta la instancia de router de koa con los parametros del archivo endpoints.js ya procesadas
 │   └── views                           // index del explorador
 ├── public                              // Archivos css, js o imagenes
-├── app.js                              // Inicia toda esta madre
-├── config.js                           // Archivo con las variables que utiliza la aplicacion
+├── app.js                              // Inicia la aplicacion
+├── config.js                           // Archivo con las variables de configuracion
 ├── docker-compose.yml                  // Archivo de configuracion para iniciar las imagenes de Docker 
 ├── Dockerfile                          // Contruye la imagen Docker para este proyecto
-├── ecosystem.example.yml               // Archivo de ejemplo de configuracion para pm2
+├── ecosystem.example.yml               // Archivo de ejemplo de configuracion para iniciar con pm2
 └── package.json 												
 ```
 
@@ -112,7 +112,7 @@ Para dar de alta un endpoint nuevo
 
 ```
 
-Logs
+Logs de PM2
 =======
 
 ```js
