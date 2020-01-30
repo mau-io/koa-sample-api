@@ -51,8 +51,5 @@ if(process.env.NODE_ENV != "production"){
 router.get('/',   async (ctx, next) => ctx.throw(403));
 router.post('/',  async (ctx, next) => ctx.throw(403));
 
-module.exports = {
-	routes(){ 				return router.routes() },
-	allowedMethods(){	return router.allowedMethods() }
-};
+module.exports = router;
 

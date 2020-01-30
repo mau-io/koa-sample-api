@@ -24,13 +24,12 @@
     "pg": "^7.1.2"
   },
   "devDependencies": {
-    "frisby": "^0.8.5",
-    "get-port": "^3.0.0",
-    "jasmine-node": "*",
-    "optimist": "*"
+    "mocha": "^6.2.2"
   },
   "scripts": {
-    "start": "node app.js"
+    "watch": "pm2 start server.js --watch --node-args='--max-old-space-size=128' ",
+    "start": "pm2 start ecosystem.yml --env development",
+    "test": "mocha test --timeout 6s"
   },
   "engines": {
     "node": ">=7.6.x"

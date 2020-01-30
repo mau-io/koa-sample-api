@@ -1,6 +1,6 @@
 const http  = require('http'),
       Koa   = require('koa'),
-      {routes, allowedMethods}  = require('./app/routes'),
+      router = require('./app/routes'),
       app   = new Koa();
 
 const cors  = require('koa2-cors'),
@@ -43,14 +43,16 @@ app.use(serve('./public'));
 // Routes
 // //////////////////////////////////////////////////////////
 
-app.use(routes()); // Use the routes defined using the ./app/routes
-app.use(allowedMethods());
+app.use(router.routes()); // Use the routes defined using the ./app/routes
+app.use(router.allowedMethods());
 
-const server = http.createServer(app.callback()).listen(config.SERVER.port,  () => {
+const server = http.createServer(app.callback());
+    
+server.listen(config.SERVER.port, () => {
 
   console.log(`
   \x1b[34m================================================================
-  \x1b[36m API RUNNING  (ﾟｰﾟ)/
+  \x1b[36m \\( ﾟヮﾟ)/  ${config.SERVER.port} RUNNING - PID: ${process.pid}
   \x1b[34m================================================================
   \x1b[36m NODE_ENV:          \x1b[0m ${process.env.NODE_ENV}
   \x1b[36m Listening at port: \x1b[0m ${config.SERVER.port} 
