@@ -76,6 +76,7 @@
                   <td class="type">
                     {{ param.type }}
                     <span v-if="param.type === 'enum'">{{ param.values }}</span> 
+                    
                     <span v-if="param.itemType === 'object'" class="required">object</span>
 
                     <span v-if="param.rule">
@@ -258,6 +259,10 @@
 
               break;       
 
+            case "object":
+              obj[param] = formatModel(model[param].rule);
+              break;  
+            
             default:
               obj[param] = "";
           }
