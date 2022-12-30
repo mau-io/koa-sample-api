@@ -24,7 +24,7 @@
     "pg": "^7.1.2"
   },
   "devDependencies": {
-    "mocha": "^6.2.2"
+    "mocha": "^10.2.0"
   },
   "scripts": {
     "watch": "pm2 start server.js --watch --node-args='--max-old-space-size=128' ",
